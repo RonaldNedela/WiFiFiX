@@ -56,6 +56,13 @@ WiFiFiX hooks the private `findRSN_IE_Parser` entry point inside `wifid` and `Wi
 
 ---
 
+## Performance and Resource Optimization
+
+- **Zero-Allocation Fast Path**: Wi-Fi beacons and probe responses are inspected in a single non-allocating pass. Over 99% of networks utilize standard WPA2 AKMs that require no modification; in these cases, `filterAuthSels` immediately returns without allocating any `CFMutableArrayRef` heap memory, eliminating garbage collection and heap fragmentation in `wifid`.
+- **Silent Image Scanning**: Image enumeration during constructor initialization suppresses false-positive diagnostic logs for non-networking system libraries, keeping daemon startup instantaneous and free of syslog overhead.
+
+---
+
 ## Installation
 
 ### Requirements

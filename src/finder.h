@@ -37,14 +37,12 @@ static uintptr_t findRSN_IE_ParserInImage(const mach_header_t *header,
          * fallback so the finder keeps working on future iOS revisions. */
         (!findSection(header, slide, "__DATA",       "__cfstring", &cfstring) &&
          !findSection(header, slide, "__DATA_CONST", "__cfstring", &cfstring))) {
-        syslog(LOG_ERR, TAG ": required Mach-O sections not found");
         return 0;
     }
 
     uintptr_t ver_cf  = resolveCFString(&cstring, &cfstring, "IE_KEY_RSN_VERSION");
     uintptr_t auth_cf = resolveCFString(&cstring, &cfstring, "IE_KEY_RSN_AUTHSELS");
     if (!ver_cf || !auth_cf) {
-        syslog(LOG_ERR, TAG ": RSN IE key CFStrings not found");
         return 0;
     }
 

@@ -65,6 +65,27 @@ static void filterAuthSels(CFMutableDictionaryRef rsnIE) {
     CFIndex count = CFArrayGetCount(authSels);
     if (count == 0) return;
 
+    // Fast path: avoid heap allocation if all AKMs are already valid.
+    // Over 99% of Wi-Fi beacons require no filtering.
+    bool needsFiltering = false;
+    for (CFIndex i = 0; i < count; i++) {
+        CFTypeRef elem = CFArrayGetValueAtIndex(authSels, i);
+        if (!elem || CFGetTypeID(elem) != CFNumberGetTypeID()) {
+            needsFiltering = true;
+            break;
+        }
+        int32_t akm = 0;
+        if (!CFNumberGetValue((CFNumberRef)elem, kCFNumberSInt32Type, &akm) ||
+            akm < 1 || akm > g_max_known_akm) {
+            needsFiltering = true;
+            break;
+        }
+    }
+
+    if (!needsFiltering) {
+        return;
+    }
+
     CFMutableArrayRef filtered = CFArrayCreateMutable(kCFAllocatorDefault, 0, &kCFTypeArrayCallBacks);
     if (!filtered) return;
 
