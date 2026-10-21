@@ -1,0 +1,8 @@
+Package: com.ronci.wififix
+Name: WiFiFiX
+Version: 1.0.0
+Architecture: iphoneos-arm
+Description: Fixes WPA2/WPA3 transitional Wi-Fi network connection failure on legacy iOS devices. Strips unhandled AKMs (like SAE=8) from RSN IE so wifid associates smoothly via standard WPA2-PSK instead of throwing -0xF3C error.
+Maintainer: Ronald Nedela
+Author: Ronald Nedela
+Section: Tweaks

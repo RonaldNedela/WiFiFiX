@@ -1,0 +1,4 @@
+#!/bin/sh
+if [ -x /usr/libexec/wifid ] || [ -x /usr/sbin/wifid ]; then
+    killall wifid 2>/dev/null || true
+fi
